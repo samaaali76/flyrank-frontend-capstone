@@ -1,0 +1,17 @@
+# Project: FlyRank Frontend Capstone
+
+## Stack
+- HTML5, CSS3, JavaScript
+- Framework: (سيتم تحديده لاحقًا - React/Vue/Vanilla JS)
+- Styling: (Tailwind/Bootstrap/Custom CSS)
+
+## Conventions
+- Use semantic HTML5 elements
+- Follow BEM naming convention for CSS classes
+- Write clean, commented, readable code
+- Prioritize accessibility (WCAG guidelines)
+- Mobile-first responsive design
+
+## AI Assistant Notes
+This project is part of the FlyRank AI Internship — Front-End AI Engineering track.
+Focus on production-grade UX, not generic templates.
