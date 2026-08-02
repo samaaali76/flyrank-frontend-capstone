@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Contact FlyRank — send us a message and we'll get back to you."
+    />
+    <title>Contact Us | FlyRank</title>
+    <link rel="stylesheet" href="css/contact-form.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="page__header">
+        <p class="page__eyebrow">FlyRank Capstone</p>
+        <h1 class="page__title">Contact us</h1>
+        <p class="page__subtitle">
+          Have a question or feedback? Fill out the form below and we'll respond
+          within one business day.
+        </p>
+      </header>
+
+      <section class="page__content" aria-labelledby="contact-form-heading">
+        <h2 id="contact-form-heading" class="visually-hidden">
+          Contact form
+        </h2>
+
+        <div
+          class="contact-form__status contact-form__status--success"
+          id="form-success"
+          role="status"
+          aria-live="polite"
+          tabindex="-1"
+          hidden
+        >
+          <p class="contact-form__status-title">Message sent successfully</p>
+          <p class="contact-form__status-text">
+            Thank you for reaching out. We'll be in touch soon.
+          </p>
+        </div>
+
+        <form
+          class="contact-form"
+          id="contact-form"
+          novalidate
+          aria-describedby="form-error-summary"
+        >
+          <div
+            class="contact-form__error-summary"
+            id="form-error-summary"
+            role="alert"
+            aria-live="assertive"
+            hidden
+          >
+            <p class="contact-form__error-summary-title">
+              Please fix the following errors:
+            </p>
+            <ul class="contact-form__error-summary-list" id="error-summary-list"></ul>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="name">
+              Full name <span class="contact-form__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="contact-form__input"
+              type="text"
+              id="name"
+              name="name"
+              autocomplete="name"
+              required
+              minlength="2"
+              maxlength="80"
+              aria-required="true"
+              aria-describedby="name-error"
+            />
+            <p class="contact-form__error" id="name-error" role="alert"></p>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="email">
+              Email address <span class="contact-form__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="contact-form__input"
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              inputmode="email"
+              required
+              maxlength="120"
+              aria-required="true"
+              aria-describedby="email-error"
+            />
+            <p class="contact-form__error" id="email-error" role="alert"></p>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="phone">
+              Phone number <span class="contact-form__optional">(optional)</span>
+            </label>
+            <input
+              class="contact-form__input"
+              type="tel"
+              id="phone"
+              name="phone"
+              autocomplete="tel"
+              inputmode="tel"
+              maxlength="20"
+              aria-describedby="phone-error phone-hint"
+            />
+            <p class="contact-form__hint" id="phone-hint">
+              Include country code if outside your region.
+            </p>
+            <p class="contact-form__error" id="phone-error" role="alert"></p>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="subject">
+              Subject <span class="contact-form__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="contact-form__input"
+              type="text"
+              id="subject"
+              name="subject"
+              required
+              minlength="3"
+              maxlength="120"
+              aria-required="true"
+              aria-describedby="subject-error"
+            />
+            <p class="contact-form__error" id="subject-error" role="alert"></p>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="message">
+              Message <span class="contact-form__required" aria-hidden="true">*</span>
+            </label>
+            <textarea
+              class="contact-form__textarea"
+              id="message"
+              name="message"
+              rows="6"
+              required
+              minlength="10"
+              maxlength="1000"
+              aria-required="true"
+              aria-describedby="message-error message-counter"
+            ></textarea>
+            <div class="contact-form__meta">
+              <p class="contact-form__error" id="message-error" role="alert"></p>
+              <p class="contact-form__counter" id="message-counter" aria-live="polite">
+                0 / 1000
+              </p>
+            </div>
+          </div>
+
+          <div class="contact-form__actions">
+            <button class="contact-form__submit" type="submit" id="submit-btn">
+              <span class="contact-form__submit-text">Send message</span>
+              <span class="contact-form__submit-loading" aria-hidden="true" hidden>
+                Sending…
+              </span>
+            </button>
+            <button class="contact-form__reset" type="reset">
+              Clear form
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="js/contact-form.js"></script>
+  </body>
+</html>
