@@ -15,3 +15,7 @@
 ## AI Assistant Notes
 This project is part of the FlyRank AI Internship — Front-End AI Engineering track.
 Focus on production-grade UX, not generic templates.
+## Contact Form / Validation Rules (learned from FE-03 workflow drill)
+- Contact/settings forms must have exactly the fields specified in the task — do not add extra fields (e.g. Phone, Subject) unless explicitly requested.
+- Email validation must use a proper regex (e.g. /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/), never a simple .includes("@") check.
+- Every form must trim whitespace before validating required fields — whitespace-only input is not valid input.
