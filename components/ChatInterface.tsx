@@ -6,9 +6,10 @@ import { useChat } from '@ai-sdk/react';
 import { useState, useRef, useEffect, FormEvent } from 'react';
 
 export function ChatInterface() {
-  const { messages, sendMessage, status, stop } = useChat();
-  const [input, setInput] = useState('');
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { messages, sendMessage, status, stop, error, regenerate } = useChat();
+const [input, setInput] = useState('');
+  const [isRetrying, setIsRetrying] = useState(false);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isPinnedToBottom = useRef(true);
 
   const isStreaming = status === 'streaming' || status === 'submitted';
@@ -24,6 +25,7 @@ export function ChatInterface() {
   }
 
   useEffect(() => {
+    setIsRetrying(false);
     if (isPinnedToBottom.current) {
       scrollContainerRef.current?.scrollTo({
         top: scrollContainerRef.current.scrollHeight,
@@ -53,7 +55,27 @@ export function ChatInterface() {
     <div className="chat">
       <div className="chat__messages" ref={scrollContainerRef} onScroll={handleScroll}>
         {messages.length === 0 && (
-          <p className="chat__empty">Say hello to start the conversation.</p>
+          <div className="chat__empty">
+            <p className="chat__empty-title">
+              Ask me about Samaa&apos;s projects
+            </p>
+            <div className="chat__empty-suggestions">
+              {[
+                'Tell me about your capstone project',
+                'What projects have you built?',
+                'What tech stack do you use?',
+              ].map((suggestion) => (
+                <button
+                  key={suggestion}
+                  type="button"
+                  className="chat__suggestion-chip"
+                  onClick={() => setInput(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
 
         {messages.map((message) => (
@@ -136,13 +158,36 @@ export function ChatInterface() {
           </div>
         ))}
 
-        {status === 'submitted' && (
+{status === 'submitted' && (
           <div className="chat__message chat__message--assistant">
             <span className="chat__message-role">Assistant</span>
             <div className="chat__thinking">
               <span className="chat__dot" />
               <span className="chat__dot" />
               <span className="chat__dot" />
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="chat__error">
+            <span className="chat__error-icon">⚠</span>
+            <div className="chat__error-body">
+              <p className="chat__error-text">
+                Something went wrong. The last message wasn&apos;t sent.
+              </p>
+              <button
+                type="button"
+                className="chat__retry-button"
+                onClick={() => {
+                  if (isRetrying) return;
+                  setIsRetrying(true);
+                  regenerate();
+                }}
+                disabled={isRetrying}
+              >
+                {isRetrying ? 'Retrying…' : 'Retry'}
+              </button>
             </div>
           </div>
         )}

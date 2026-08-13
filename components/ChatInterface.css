@@ -311,3 +311,95 @@
 .project-card__link:hover {
   text-decoration: underline;
 }
+
+/* ---------- Chat-level error state (mid-stream failure) ---------- */
+
+.chat__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 4px 0;
+}
+
+.chat__error-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  color: #b91c1c;
+}
+
+.chat__error-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.chat__error-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #7f1d1d;
+  line-height: 1.4;
+}
+
+.chat__retry-button {
+  align-self: flex-start;
+  background: #b91c1c;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat__retry-button:disabled {
+  background: #d1a3a3;
+  cursor: not-allowed;
+}
+
+/* ---------- Designed empty state ---------- */
+
+.chat__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  margin-top: 60px;
+  padding: 0 20px;
+}
+
+.chat__empty-title {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.chat__empty-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.chat__suggestion-chip {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: #2563eb;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.chat__suggestion-chip:hover {
+  background: #eef4ff;
+  border-color: #cddcff;
+}
