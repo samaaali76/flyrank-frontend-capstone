@@ -1,5 +1,6 @@
 'use client';
-
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useChat } from '@ai-sdk/react';
 import { useState, useRef, useEffect, FormEvent } from 'react';
 
@@ -65,7 +66,11 @@ export function ChatInterface() {
             <div className="chat__message-body">
               {message.parts.map((part, index) => {
                 if (part.type === 'text') {
-                  return <span key={index}>{part.text}</span>;
+                 return (
+                          <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>
+                              {part.text}
+                             </ReactMarkdown>
+                       );          
                 }
                 return null;
               })}
