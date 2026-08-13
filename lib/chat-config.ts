@@ -1,8 +1,4 @@
-// Central place for chat model configuration.
-// Keeping this separate from the route handler makes it easy to extend
-// later (FE-07 adds tool calling on top of this same config).
-
-export const CHAT_MODEL = 'claude-sonnet-4-5';
+export const CHAT_MODEL = 'gemini-3.6-flash';
 
 export const SYSTEM_PROMPT = `You are a helpful assistant embedded in Samaa Ali's
 front-end portfolio site. Keep responses concise and friendly. This is a demo
