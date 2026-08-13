@@ -1,4 +1,5 @@
 'use client';
+import { ProjectCard } from '@/components/ProjectCard';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useChat } from '@ai-sdk/react';
@@ -64,14 +65,71 @@ export function ChatInterface() {
               {message.role === 'user' ? 'You' : 'Assistant'}
             </span>
             <div className="chat__message-body">
-              {message.parts.map((part, index) => {
+{message.parts.map((part, index) => {
                 if (part.type === 'text') {
-                 return (
-                          <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>
-                              {part.text}
-                             </ReactMarkdown>
-                       );          
+                  return <span key={index}>{part.text}</span>;
                 }
+
+                if (part.type === 'tool-getProjectInfo') {
+                  // State 1: the model is still deciding/streaming the
+                  // arguments it will send to the tool.
+                  if (part.state === 'input-streaming') {
+                    return (
+                      <div key={index} className="tool-card tool-card--pending">
+                        <span className="tool-card__icon">✎</span>
+                        <span>Preparing project lookup…</span>
+                      </div>
+                    );
+                  }
+
+                  // State 2: input is ready, execute() is running now.
+                  if (part.state === 'input-available') {
+                    return (
+                      <div key={index} className="tool-card tool-card--loading">
+                        <span className="tool-card__spinner" />
+<span>
+                          Looking up{' '}
+                          {(part.input as { projectName?: string } | undefined)
+                            ?.projectName
+                            ? `"${(part.input as { projectName?: string }).projectName}"`
+                            : 'project info'}
+                          …
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  // State 3: the tool returned successfully — render a
+                  // real component, not raw JSON.
+                  if (part.state === 'output-available') {
+                    const output = part.output as {
+                      found: boolean;
+                      projects: import('@/lib/projects-data').Project[];
+                    };
+                    return (
+                      <div key={index} className="tool-card tool-card--result">
+                        {output.projects.map((project) => (
+                          <ProjectCard key={project.slug} project={project} />
+                        ))}
+                      </div>
+                    );
+                  }
+
+                  // State 4: the tool threw an error — designed error
+                  // state, not a crash or a raw stack trace.
+                  if (part.state === 'output-error') {
+                    return (
+                      <div key={index} className="tool-card tool-card--error">
+                        <span className="tool-card__icon">⚠</span>
+                        <span>
+                          Couldn&apos;t find that project.{' '}
+                          {part.errorText ?? 'Please try a different name.'}
+                        </span>
+                      </div>
+                    );
+                  }
+                }
+
                 return null;
               })}
             </div>

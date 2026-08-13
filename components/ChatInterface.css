@@ -198,3 +198,116 @@
     max-width: 90%;
   }
 }
+/* ---------- Tool call states ---------- */
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin: 4px 0;
+}
+
+/* State 1: input-streaming — the model is still composing arguments */
+.tool-card--pending {
+  background: #f5f5f5;
+  color: #888;
+  border: 1px dashed #ccc;
+  font-style: italic;
+}
+
+.tool-card__icon {
+  font-size: 0.9rem;
+}
+
+/* State 2: input-available — execute() is running now */
+.tool-card--loading {
+  background: #eef4ff;
+  color: #2563eb;
+  border: 1px solid #cddcff;
+}
+
+.tool-card__spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #cddcff;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: tool-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes tool-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* State 3: output-available — real rendered result, not a bare card */
+.tool-card--result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: transparent;
+  padding: 0;
+}
+
+/* State 4: output-error — visually distinct failure state */
+.tool-card--error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* ---------- Project card (tool result component) ---------- */
+
+.project-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  max-width: 340px;
+}
+
+.project-card__name {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.project-card__description {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.project-card__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.project-card__chip {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.project-card__link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.project-card__link:hover {
+  text-decoration: underline;
+}
