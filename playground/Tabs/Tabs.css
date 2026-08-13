@@ -1,0 +1,40 @@
+.tabs__list {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.tabs__tab {
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tabs__tab:hover {
+  color: #111;
+}
+
+.tabs__tab.is-active {
+  color: #111;
+  font-weight: 600;
+  border-bottom-color: #111;
+}
+
+.tabs__tab:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.tabs__panel {
+  padding: 16px 4px;
+}
+
+.tabs__panel:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
