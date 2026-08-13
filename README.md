@@ -34,3 +34,53 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## AI Chat Tools
+
+The `/chat` page uses a streaming AI assistant (Google Gemini via the AI SDK)
+that can call server-side tools to answer questions with real, structured
+data instead of guessing.
+
+### `getProjectInfo`
+
+Looks up details about the portfolio's projects — used when a visitor asks
+about a specific project or wants to see what's been built.
+
+**Defined in:** [`lib/chat-tools.ts`](./lib/chat-tools.ts)
+**Data source:** [`lib/projects-data.ts`](./lib/projects-data.ts)
+
+**Input schema** (validated with [Zod](https://zod.dev)):
+
+| Field         | Type              | Required | Description                                                              |
+|---------------|-------------------|----------|----------------------------------------------------------------------------|
+| `projectName` | `string`          | No       | Keyword to search for (e.g. `"capstone"`). Omitted → returns all projects. |
+
+**Return shape:**
+
+```ts
+{
+  found: boolean;
+  projects: {
+    slug: string;
+    name: string;
+    description: string;
+    stack: string[];
+    link?: string;
+  }[];
+}
+```
+
+If no project matches the given `projectName`, the tool throws an error
+instead of returning an empty result, which the client renders as a
+dedicated error state (see below).
+
+### Tool call UI states
+
+The chat renders each tool call through four distinct visual states,
+handled in [`components/ChatInterface.tsx`](./components/ChatInterface.tsx):
+
+| State              | What it means                          | Visual treatment                          |
+|---------------------|-----------------------------------------|--------------------------------------------|
+| `input-streaming`   | Model is composing the tool arguments   | Dashed grey placeholder, "Preparing…"      |
+| `input-available`   | Arguments ready, `execute()` is running | Blue spinner card, "Looking up…"           |
+| `output-available`  | Tool succeeded                          | A real `ProjectCard` component per result  |
+| `output-error`      | Tool threw an error                     | Red card with a warning icon and message   |
