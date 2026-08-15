@@ -1,4 +1,6 @@
 'use client';
+import { SendButton } from './Sendbutton';
+import './Sendbutton.css';
 import { ProjectCard } from '@/components/ProjectCard';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -204,24 +206,22 @@ const [input, setInput] = useState('');
       )}
 
       <form className="chat__input-row" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          className="chat__input"
-          disabled={isStreaming}
-        />
-        {isStreaming ? (
-          <button type="button" className="chat__stop-button" onClick={stop}>
-            Stop
-          </button>
-        ) : (
-          <button type="submit" className="chat__send-button" disabled={!input.trim()}>
-            Send
-          </button>
-        )}
-      </form>
+  <input
+    type="text"
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    placeholder="Type a message..."
+    className="chat__input"
+    disabled={isStreaming}
+  />
+  <SendButton
+     isLoading={isStreaming}
+     isDisabled={!input.trim()}
+     hasError={!!error}
+     onStop={stop}
+      onRetry={regenerate}
+  />
+</form>
     </div>
   );
 }

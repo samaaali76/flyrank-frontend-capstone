@@ -1,0 +1,187 @@
+/* ============================================================
+   SendButton — Motion & State Micro-interactions (FE-AA1)
+   
+   Duration choices:
+   - 200ms for state swaps (fast enough to feel instant, slow
+     enough to be perceivable — the "blink test" threshold)
+   - 1200ms success dwell (long enough to read ✓, short enough
+     to not feel like a delay)
+   - 400ms error shake (one cycle; repeating would feel punishing)
+   
+   Easing choices:
+   - ease-out for enter transitions (snappy start, soft landing)
+   - ease-in-out for the shake (natural physical arc)
+   
+   Compositor-friendly: only transform and opacity animated,
+   no width/height/margin changes that cause layout thrash.
+   ============================================================ */
+
+.send-btn {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  /* Typography */
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  /* Base transition — colour, opacity, transform */
+  transition:
+    background-color 200ms ease-out,
+    color 200ms ease-out,
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
+
+  /* GPU layer hint */
+  will-change: transform, opacity;
+}
+
+/* ── State: idle ── */
+.send-btn--idle {
+  background: #2563eb;
+  color: #fff;
+}
+
+.send-btn--idle:hover {
+  background: #1d4ed8;
+  transform: scale(1.04);
+}
+
+.send-btn--idle:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.send-btn--idle:active {
+  transform: scale(0.97);
+}
+
+/* ── State: disabled ── */
+.send-btn--disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* ── State: loading ── */
+.send-btn--loading {
+  background: #475569;
+  color: #fff;
+  cursor: pointer; /* acts as stop button */
+}
+
+.send-btn--loading:hover {
+  background: #dc2626;
+}
+
+.send-btn--loading:focus-visible {
+  outline: 3px solid #fca5a5;
+  outline-offset: 2px;
+}
+
+/* Spinner */
+.send-btn__spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: send-spin 0.65s linear infinite;
+}
+
+@keyframes send-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── State: success ── */
+.send-btn--success {
+  background: #16a34a;
+  color: #fff;
+  /* Label fades/scales in */
+  animation: send-success-pop 200ms ease-out both;
+}
+
+@keyframes send-success-pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── State: error ── */
+.send-btn--error {
+  background: #dc2626;
+  color: #fff;
+  animation: send-shake 400ms ease-in-out both;
+}
+
+@keyframes send-shake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.send-btn--error:hover {
+  background: #b91c1c;
+}
+
+.send-btn--error:focus-visible {
+  outline: 3px solid #fca5a5;
+  outline-offset: 2px;
+}
+
+/* Label wrapper — shared fade-in between states */
+.send-btn__label {
+  display: inline-block;
+  animation: send-label-in 150ms ease-out both;
+}
+
+@keyframes send-label-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────
+   Honour the OS preference: keep colour feedback, remove motion.
+   ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .send-btn,
+  .send-btn__label {
+    animation: none !important;
+    transition: background-color 100ms ease, color 100ms ease, opacity 100ms ease !important;
+  }
+
+  .send-btn__spinner {
+    animation: send-spin 0.65s linear infinite; /* keep spinner — it's informational */
+  }
+
+  .send-btn--idle:hover,
+  .send-btn--idle:active {
+    transform: none;
+  }
+}
