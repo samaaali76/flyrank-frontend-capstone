@@ -15,7 +15,12 @@ interface SendButtonProps {
 export function SendButton({ isLoading, isDisabled, hasError, onStop, onRetry }: SendButtonProps) {  // Only the transient states (idle/success/error) need to be tracked
   // as local state — "loading" and "disabled" are always derivable
   // directly from props, so they can never get stuck.
-  const [transientState, setTransientState] = useState<'idle' | 'success' | 'error'>('idle');
+  // Only "success" needs to be tracked as a transient local pulse —
+  // it's not derivable from props alone (it has to fade after 1200ms).
+  // "error" is derived directly from the hasError prop instead of a
+  // transition, so mounting the button with hasError already true
+  // (e.g. after a page refresh, or in isolated tests) still shows it.
+  const [showSuccess, setShowSuccess] = useState(false);
   const prevLoading = useRef(false);
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -26,29 +31,26 @@ export function SendButton({ isLoading, isDisabled, hasError, onStop, onRetry }:
   }, []);
 
   useEffect(() => {
-    if (!isLoading && prevLoading.current) {
-      if (hasError) {
-        setTransientState('error');
-      } else {
-        setTransientState('success');
-        successTimer.current = setTimeout(() => {
-          setTransientState('idle');
-        }, 1200);
-      }
+    if (!isLoading && prevLoading.current && !hasError) {
+      setShowSuccess(true);
+      successTimer.current = setTimeout(() => {
+        setShowSuccess(false);
+      }, 1200);
     }
     prevLoading.current = isLoading;
   }, [isLoading, hasError]);
 
-  // Priority: loading always wins the display, then a transient
-  // success/error result, then disabled, then plain idle.
+  // Priority: loading always wins the display, then a real error,
+  // then a transient success pulse, then disabled, then plain idle.
   const state: ButtonState = isLoading
     ? 'loading'
-    : transientState !== 'idle'
-    ? transientState
+    : hasError
+    ? 'error'
+    : showSuccess
+    ? 'success'
     : isDisabled
     ? 'disabled'
     : 'idle';
-
   const label = {
     idle: 'Send',
     disabled: 'Send',
@@ -63,7 +65,9 @@ export function SendButton({ isLoading, isDisabled, hasError, onStop, onRetry }:
       onClick={isLoading ? onStop : state === 'error' ? onRetry : undefined}
       className={`send-btn send-btn--${state}`}
       disabled={state === 'disabled'}
-      aria-label={isLoading ? 'Stop generating' : 'Send message'}
+      aria-label={
+          isLoading ? 'Stop generating' : state === 'error' ? 'Retry sending message' : 'Send message'
+      }
       aria-live="polite"
     >
       {state === 'loading' ? (
