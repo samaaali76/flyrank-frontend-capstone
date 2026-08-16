@@ -207,13 +207,14 @@ const [input, setInput] = useState('');
 
       <form className="chat__input-row" onSubmit={handleSubmit}>
   <input
-    type="text"
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    placeholder="Type a message..."
-    className="chat__input"
-    disabled={isStreaming}
-  />
+  type="text"
+  value={input}
+  onChange={(e) => setInput(e.target.value)}
+  placeholder="Type a message..."
+  aria-label="Chat message"
+  className="chat__input"
+  disabled={isStreaming}
+/>
   <SendButton
      isLoading={isStreaming}
      isDisabled={!input.trim()}
