@@ -55,7 +55,15 @@ const [input, setInput] = useState('');
 
   return (
     <div className="chat">
-      <div className="chat__messages" ref={scrollContainerRef} onScroll={handleScroll}>
+      <div
+        className="chat__messages"
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        role="log"
+        aria-live="polite"
+        aria-atomic="false"
+        aria-label="Conversation with the assistant"
+      >
         {messages.length === 0 && (
           <div className="chat__empty">
             <p className="chat__empty-title">
