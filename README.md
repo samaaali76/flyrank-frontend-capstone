@@ -84,3 +84,15 @@ handled in [`components/ChatInterface.tsx`](./components/ChatInterface.tsx):
 | `input-available`   | Arguments ready, `execute()` is running | Blue spinner card, "Looking up…"           |
 | `output-available`  | Tool succeeded                          | A real `ProjectCard` component per result  |
 | `output-error`      | Tool threw an error                     | Red card with a warning icon and message   |
+
+## FE-AA3: Signature Hero Shader
+
+A fullscreen GLSL starfield shader rendered with Three.js as the portfolio hero.
+
+**What it does:** Three layers of procedurally placed stars drift at different speeds and densities to fake depth (parallax). The mouse gently pans the whole field. A smooth three-stop gradient (slate-teal → pale teal → soft pink) forms the background.
+
+**Uniforms used:** `u_time` (drives star drift and twinkle animation) and `u_mouse` (parallax offset per layer).
+
+**Reduced-motion fallback:** WebGL is skipped entirely when `prefers-reduced-motion: reduce` is set. A static CSS `linear-gradient` with the same three palette colours renders instead — same visual identity, zero motion.
+
+**Performance decisions:** `devicePixelRatio` is capped at 2 (no visible benefit beyond that, saves GPU), and the render loop pauses via the `visibilitychange` event when the tab is hidden.
