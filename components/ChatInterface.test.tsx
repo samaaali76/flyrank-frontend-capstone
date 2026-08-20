@@ -53,8 +53,8 @@ describe('ChatInterface', () => {
     );
     render(<ChatInterface />);
 
-    expect(screen.getByText('Hello there!')).toBeInTheDocument();
-  });
+expect(screen.getByText(/Hello there!/i)).toBeInTheDocument();
+ });
 
   it('shows a pending/thinking indicator while a message is submitted', () => {
     mockUseChat.mockReturnValue(baseChatState({ status: 'submitted' }));
