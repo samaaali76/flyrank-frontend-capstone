@@ -53,7 +53,9 @@ describe('ChatInterface', () => {
     );
     render(<ChatInterface />);
 
-    expect(screen.getByText(/Hello there!/i)).toBeInTheDocument();
+    expect(screen.getByText((content, element) => 
+     element?.tagName === 'P' && content === 'Hello there!'
+   )).toBeInTheDocument();
   });
 
   it('shows a pending/thinking indicator while a message is submitted', () => {
