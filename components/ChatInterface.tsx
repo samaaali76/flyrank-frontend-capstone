@@ -2,15 +2,29 @@
 import { SendButton } from './Sendbutton';
 import './Sendbutton.css';
 import { ProjectCard } from '@/components/ProjectCard';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import dynamic from 'next/dynamic';
 import { useChat } from '@ai-sdk/react';
 import { useState, useRef, useEffect, FormEvent } from 'react';
+import type { PluggableList } from 'unified';
+
+const ReactMarkdown = dynamic(() => import('react-markdown'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export function ChatInterface() {
   const { messages, sendMessage, status, stop, error, regenerate } = useChat();
 const [input, setInput] = useState('');
   const [isRetrying, setIsRetrying] = useState(false);
+  // remark-gfm is loaded lazily too, only once a message has actually
+  // arrived — keeps it out of the initial bundle entirely.
+  const [remarkPlugins, setRemarkPlugins] = useState<PluggableList>([]);
+
+  useEffect(() => {
+    if (messages.length === 0) return;
+    import('remark-gfm').then((mod) => setRemarkPlugins([mod.default]));
+  }, [messages.length]);
+
     const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isPinnedToBottom = useRef(true);
 
@@ -55,7 +69,15 @@ const [input, setInput] = useState('');
 
   return (
     <div className="chat">
-      <div className="chat__messages" ref={scrollContainerRef} onScroll={handleScroll}>
+      <div
+        className="chat__messages"
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        role="log"
+        aria-live="polite"
+        aria-atomic="false"
+        aria-label="Conversation with the assistant"
+      >
         {messages.length === 0 && (
           <div className="chat__empty">
             <p className="chat__empty-title">
@@ -91,7 +113,11 @@ const [input, setInput] = useState('');
             <div className="chat__message-body">
 {message.parts.map((part, index) => {
                 if (part.type === 'text') {
-                  return <span key={index}>{part.text}</span>;
+                  return (
+                    <ReactMarkdown key={index} remarkPlugins={remarkPlugins}>
+                      {part.text}
+                    </ReactMarkdown>
+                  );
                 }
 
                 if (part.type === 'tool-getProjectInfo') {

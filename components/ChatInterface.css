@@ -3,11 +3,13 @@
   flex-direction: column;
   height: 70vh;
   max-height: 600px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  background: #fff;
+  background: rgba(20, 12, 22, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .chat__messages {
@@ -36,8 +38,8 @@
 
 .chat__message--assistant {
   align-self: flex-start;
-  background: #f1f1f1;
-  color: #111;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5f0f2;
   border-bottom-left-radius: 4px;
 }
 
@@ -134,11 +136,17 @@
 
 .chat__input {
   flex: 1;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
   padding: 10px 16px;
   font-size: 0.95rem;
   min-width: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.chat__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .chat__input:focus {
@@ -316,7 +324,7 @@
 }
 
 .chat__empty-title {
-  color: #666;
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -330,12 +338,12 @@
 }
 
 .chat__suggestion-chip {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
   padding: 8px 16px;
   font-size: 0.85rem;
-  color: #2563eb;
+  color: #ffd9c9;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
