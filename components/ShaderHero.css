@@ -1,0 +1,54 @@
+.shader-hero {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+ .shader-hero__canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.shader-hero__canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Static fallback: same palette as the shader, no WebGL, no motion.
+   Shown instead of the canvas when prefers-reduced-motion is set. */
+.shader-hero__fallback {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #5d6b6b 0%,
+    #d5e5e5 55%,
+    #f7cbca 100%
+  );
+}
+
+.shader-hero__content--inline {
+  text-align: center;
+  padding: 60px 0 20px;
+}
+
+.shader-hero__content--inline .shader-hero__name {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin: 0 0 10px;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+.shader-hero__content--inline .shader-hero__tagline {
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
