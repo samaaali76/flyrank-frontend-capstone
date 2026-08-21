@@ -2,12 +2,26 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ChatInterface } from './ChatInterface';
 
+
 // Mock the AI SDK's useChat hook entirely — tests must never call the
 // real API. Each test configures what this mock returns before rendering.
 const mockUseChat = vi.fn();
-
 vi.mock('@ai-sdk/react', () => ({
   useChat: () => mockUseChat(),
+}));
+
+// react-markdown is lazy-loaded via next/dynamic in the real app
+// (see FE-10's performance fix), which doesn't resolve properly in
+// Vitest's jsdom environment. Mock it here to a plain component that
+// just renders its children as text, so tests can still assert on
+// message content without pulling in the real markdown renderer.
+vi.mock('next/dynamic', () => ({
+  default: () => {
+    function MockReactMarkdown({ children }: { children: string }) {
+      return children;
+    }
+    return MockReactMarkdown;
+  },
 }));
 
 function baseChatState(overrides = {}) {
@@ -53,7 +67,7 @@ describe('ChatInterface', () => {
     );
     render(<ChatInterface />);
 
-    expect(screen.getByText('Hello there!')).toBeInTheDocument();
+    expect(screen.getByText(/Hello there!/)).toBeInTheDocument();
   });
 
   it('shows a pending/thinking indicator while a message is submitted', () => {
