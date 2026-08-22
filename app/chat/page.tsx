@@ -17,9 +17,9 @@ export default function ChatPage() {
           </p>
         </div>
 
-        <h2 className="mb-6 text-2xl font-bold text-white">
-          Chat with the Assistant
-        </h2>
+<h2 className="font-display mb-6 text-3xl text-neutral-900">
+  Chat with the Assistant
+</h2>
         <ChatInterface />
 
         <p className="mt-6 text-xs leading-relaxed text-white/70">
