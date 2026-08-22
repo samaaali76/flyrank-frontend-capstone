@@ -26,13 +26,11 @@ export async function POST(req: Request) {
 
   if (!allowed) {
     return new Response(
-      JSON.stringify({
-        error: 'Rate limit exceeded. Please try again later.',
-      }),
+      `data: ${JSON.stringify({ type: 'error', errorText: 'Rate limit exceeded. Please try again later.' })}\n\n`,
       {
         status: 429,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/event-stream',
           'Retry-After': String(Math.ceil((resetAt - Date.now()) / 1000)),
         },
       }
